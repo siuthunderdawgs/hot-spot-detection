@@ -1,5 +1,5 @@
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <cv.h>
+#include <highgui.h>
 
 #include <vector>
 #include <math.h>
@@ -27,5 +27,6 @@ int main(int argc, char** argv)
 	cv::namedWindow("Test Image Pyramid", CV_WINDOW_AUTOSIZE);
 	cv::imshow("Test Image Pyramid", dst);
 
+	std::cout<< "Help";
 	return 0;
 }
