@@ -10,24 +10,34 @@
 const int Width = 800;
 const int Heigth = 600;
 
-
+using namespace cv;
 
 int main(int argc, char** argv)
 {
+	int col_mult, row_mult;
+
 	char* filename;
 	filename = "test.jpg";
 
-	cv::Mat src, dst, tmp;
+	Mat src, dst, tmp;
 
-	src = cv::imread(argv[1], 1);
+	src = imread(argv[1], 1);
 
+	int col_size = src.cols;
+	int row_size = src.rows;
+
+	std::cout<<col_size<<std::endl;
+	std::cout<<row_size<<std::endl;
 	tmp = src;
 	dst = tmp;
 
-	cv::namedWindow("Test Image Pyramid", CV_WINDOW_AUTOSIZE);
-	cv::imshow("Test Image Pyramid", dst);
 
-	cv::waitKey(0);
+
+
+	namedWindow("Test Image Pyramid", CV_WINDOW_AUTOSIZE);
+	imshow("Test Image Pyramid", dst);
+
+	waitKey(0);
 
 	std::cout<< "Help";
 	return 0;
