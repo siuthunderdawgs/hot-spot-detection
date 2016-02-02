@@ -15,17 +15,19 @@ const int Heigth = 600;
 int main(int argc, char** argv)
 {
 	char* filename;
-	filename = "../Pictures/test.jpg";
+	filename = "test.jpg";
 
 	cv::Mat src, dst, tmp;
 
-	src = cv::imread(filename);
+	src = cv::imread(argv[1], 1);
 
 	tmp = src;
 	dst = tmp;
 
 	cv::namedWindow("Test Image Pyramid", CV_WINDOW_AUTOSIZE);
 	cv::imshow("Test Image Pyramid", dst);
+
+	cv::waitKey(0);
 
 	std::cout<< "Help";
 	return 0;
