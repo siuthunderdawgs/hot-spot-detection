@@ -1,7 +1,8 @@
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
+#include "imgproc/imgproc.hpp"
+#include "highgui.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <cv.h>
 
 using namespace cv;
 
@@ -25,13 +26,13 @@ void Threshold_Demo( int, void* );
 /**
  * @function main
  */
-int main( int argc, char** argv )
+int main()
 {
   /// Load an image
-  src = imread( "./Images/ir1.jpeg", 1 );
+  src = imread("./Images/ir.jpg", 0);
 
   /// Convert the image to Gray
-  cvtColor( src, src_gray, CV_BGR2GRAY );
+  //cvtColor( src, src_gray, CV_BGR2GRAY );
 
   /// Create a window to display results
   namedWindow( window_name, CV_WINDOW_AUTOSIZE );

@@ -1,9 +1,3 @@
-/*
- * HotSpotContours.cpp
- *
- *  Created on: Feb 2, 2016
- *      Author: Tyler Betzler & Shey Segelhorst
- */
 #include <cv.h>
 #include <highgui.h>
 #include <photo/photo.hpp>
@@ -41,7 +35,7 @@ int main(int argc, char** argv)
 
 
 	fastNlMeansDenoising(src, tmp, h, tempSize, searchSize );
-	threshold( tmp, dst, threshold_value, max_BINARY_value,threshold_type );
+	//threshold( tmp, dst, threshold_value, max_BINARY_value,threshold_type );
 	namedWindow("Test Filter", CV_WINDOW_AUTOSIZE);
 	imshow("Test Filter", dst);
 
