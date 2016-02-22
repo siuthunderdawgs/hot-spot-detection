@@ -9,10 +9,11 @@
 #include <imgproc/imgproc.hpp>
 #include <highgui/highgui.hpp>
 #include <photo/photo.hpp>
-
+#include<iostream>
 #include "IntensityValue.h"
 
 using namespace cv;
+using namespace std;
 
 int main()
 {
