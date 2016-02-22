@@ -1,4 +1,0 @@
-Scalar stddev, mean;
-
-meanStdDev(image, mean, stddev, Mat() );
-cout<<"Deviation: "<<stddev.val[0]<<endl;
