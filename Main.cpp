@@ -1,6 +1,7 @@
 #include<iostream>
 #include"getThreshVal.h"
 #include"getContourImg.h"
+#include"countContours.h"
 
 using namespace std;
 
@@ -9,7 +10,7 @@ int main(){
 	/* Local Variables */
 	//Images/Fabricated/f1.jpg
 	//Images/Fabricated/f2.jpg
-	const char* ir_image = "Images/Fabricated/f2.jpg";
+	const char* ir_image = "Images/Thermal/7.jpg";
 	Mat src = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
 
 	if(src.empty())
@@ -24,7 +25,8 @@ int main(){
 	char* winName1 = "Original Image";
 	char* winName2 = "Threshold Image";
 	char* winName3 = "Contour Image";
-	double Percentage = 0.10;
+	double Percentage = 0.01;
+	unsigned int count;
 
 	//Normal Image
 	namedWindow(winName1, 2);
@@ -71,9 +73,9 @@ int main(){
 	 * algorithms will help.
 	 */
 
-	while(Percentage >= 0.001)
+	while(Percentage >= 0.0001)
 	{
-		//Obtain threshold value
+		//Obtain threshold value and print value
 		int thrshld = getThreshVal(tmp1, Percentage);
 		threshold(tmp1,dst_contour,thrshld, 255, THRESH_BINARY);
 
@@ -84,11 +86,19 @@ int main(){
 		//Get the vector of contours and print contour images
 		contours = getContourImg(dst_contour);
 
-		Percentage = Percentage - 0.001;
+		//Find number of contours in image
+		count = countContours(contours);
+		if(count == 1)
+		{
+			cout << "\nDone!\n";
+			break;
+		}
+
+		Percentage = Percentage - 0.0001;
+		cout << "%" << Percentage*100 << endl;
+
 	}
-	//Output Picture
-	//namedWindow(winName3, 2);
-	//imshow(winName3, dst);
+
 
 	while(true)
 	{
