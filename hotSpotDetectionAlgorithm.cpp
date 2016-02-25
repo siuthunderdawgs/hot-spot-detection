@@ -3,39 +3,42 @@
 #include"getContourImg.h"
 #include"countContours.h"
 #include"hotSpotImage.h"
+#include"hotSpotDetectionAlgorithm.h"
 
 using namespace std;
 
-int main(){
+void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &pixel_thresh){
 
-	/* Local Variables */
-	//Images/Fabricated/f1.jpg
-	//Images/Fabricated/f2.jpg
-	const char* ir_image = "Images/Fabricated/f3.jpg";
-	Mat src = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
+
+	//const char* ir_image = "Images/Fabricated/f3.jpg";
+	//Mat src = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
 
 	if(src.empty())
 	{
 		std::cout << "Image not found. Check directory.\n";
-		return -1;
+		return;
 	}
+
+	/* Local Variables */
 
 	Mat dst_contour;
 	Mat tmp1 = src.clone();
-	Mat dst = Mat::zeros( src.size(), CV_8UC3 );
+	Mat dst = Mat::zeros( src.size(), CV_8UC3 ); // Initialize empty Mat
 	vector<Vec4i> hierarchy;
-	vector<vector<Point> > contours, prev_contours;
+	//vector<vector<Point> > contours;
+	vector<vector<Point> > prev_contours;
 	char* winName1 = "Original Image";
 	char* winName2 = "Threshold Image";
 	char* winName3 = "Hot Spot Image";
 	double Percentage = 0.10;
 	bool count, check;
 	int thrshld;
-	double pixel_thresh;
+	// double pixel_thresh;
 
-	//Normal Image
+	/*Normal Image
 	namedWindow(winName1, 2);
 	imshow(winName1, src);
+	 */
 
 	/**********Background*********
 	 * Reduce the percentage level through iteration. This will increase the
@@ -58,15 +61,8 @@ int main(){
 	 */
 
     /***********What Needs to be Done*********
-	 * 1. Find the stopping condition for the loop. (May need a different
-	 *    kind of loop)
-	 *
-	 * 2. Need a function to pass in "contours" to determine the number
-	 *    of contours in the image. Not sure what it should return.
-	 *
-	 * 3. The entire algorithm should be able to work with a windowing
-	 *    function to find all possible hot spots in an image.
-	 */
+     *
+     */
 
 	/**********End Notes*********
 	 * This isn't perfect. There are plenty of worst case scenarios this
@@ -78,10 +74,6 @@ int main(){
 	 * algorithms will help.
 	 */
 
-	/*
-	 * Find percentage to get orig thresh val, then inc thresh by 1 each loop instead of %.
-	 * use while(true),,,if(flag == 0),,,,
-	 */
 	check = true;
 	pixel_thresh = 20; //Initiate minimum contour area
 
@@ -91,30 +83,30 @@ int main(){
 		if(!check)
 		{
 			++thrshld;
-			std::cout << "Threshold: " << thrshld << std::endl;
+			// std::cout << "Threshold: " << thrshld << std::endl;
 		}
 		else
 		{
 			thrshld = getThreshVal(tmp1, Percentage);
-			cout << "Initial Thresh: %" << Percentage*100 << endl;
+			// cout << "Initial Thresh: %" << Percentage*100 << endl;
 			check = false;
 		}
 
 		threshold(tmp1,dst_contour,thrshld, 255, THRESH_BINARY);
 
-		// Show threshold image
+		/* Show threshold image
 		namedWindow(winName2, 2);
 		imshow(winName2, dst_contour);
+		 */
 
 		// Get the vector of contours and print contour images
 		contours = getContourImg(dst_contour, hierarchy);
-		//cp_contours = contours; // Make a copy
 
 		// Find number of contours in image
-		count = countContours(contours, prev_contours, pixel_thresh); //!!!!!!!!!!!!!SOMETHINGS WRONG IN HERE!!!!!!!!!!!!!!!!!!!!!!!
+		count = countContours(contours, prev_contours, pixel_thresh);
 		if(count == true)
 		{
-			cout << "\nDone!\n";
+			// cout << "\nDone!\n";
 			break;
 		}
 	}
@@ -122,11 +114,14 @@ int main(){
 	// Produce the final output Mat
 	hotSpotImage(dst, contours, pixel_thresh, hierarchy);
 
-	// Show hot spot image
+	// Output Mat dst (a.k.a. src)
+	src = dst;
+
+	/* Show hot spot image
 	namedWindow(winName3, 2);
 	imshow(winName3, dst);
 
 	waitKey(0);
-
-	return 0;
+	*/
+	// return 0;
 }

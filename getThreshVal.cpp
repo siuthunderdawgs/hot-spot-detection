@@ -51,7 +51,7 @@ int getThreshVal(Mat image, double Percentage)
 		}
 	}
 
-	std::cout << "Threshold: " << threshold << endl;
+	// std::cout << "Threshold: " << threshold << endl;
 
 	return threshold;
 
