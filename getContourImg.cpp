@@ -6,17 +6,17 @@
 using namespace cv;
 
 
-vector<vector<Point> > getContourImg(Mat src){
+vector<vector<Point> > getContourImg(Mat src, vector<Vec4i> &hierarchy){
 
-	//Mat canny_output;
+
 	vector<vector<Point> > contours;
-	vector<Vec4i> hierarchy;
 	double area;
-	Scalar color(200);
+	Scalar color(200); //color of contours in output image
 
+	//!!!Median filter, erosion and dilation
 	blur( src, src, Size(2,2) );
 
-	//This could be a robust solution, but a canny thresh is required.
+	//This could be a robust solution, but a canny thresh value is required.
 	/*
 	/// Detect edges using canny
 	Canny( src, canny_output, thresh, thresh*2, 3 );
@@ -26,7 +26,6 @@ vector<vector<Point> > getContourImg(Mat src){
         CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
 
     // iterate through all the top-level contours,
-    // draw each connected component with its own random color
     int idx = 0;
     for( ; idx >= 0; idx = hierarchy[idx][0] )
     {

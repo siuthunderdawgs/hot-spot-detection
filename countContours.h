@@ -9,11 +9,12 @@
 #define COUNTCONTOURS_H_
 #include<highgui/highgui.hpp>
 #include<imgproc/imgproc.hpp>
+#include<iostream>
 #include"countContours.h"
 
 using namespace cv;
 
-unsigned int countContours(vector<vector<Point> > contours);
+bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &prev_contours, double &pixel_thresh);
 
 
 #endif /* COUNTCONTOURS_H_ */

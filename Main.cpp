@@ -2,6 +2,7 @@
 #include"getThreshVal.h"
 #include"getContourImg.h"
 #include"countContours.h"
+#include"hotSpotImage.h"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ int main(){
 	/* Local Variables */
 	//Images/Fabricated/f1.jpg
 	//Images/Fabricated/f2.jpg
-	const char* ir_image = "Images/Thermal/7.jpg";
+	const char* ir_image = "Images/Fabricated/f3.jpg";
 	Mat src = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
 
 	if(src.empty())
@@ -19,14 +20,18 @@ int main(){
 		return -1;
 	}
 
-	Mat dst, dst_contour;
+	Mat dst_contour;
 	Mat tmp1 = src.clone();
-	vector<vector<Point> > contours;
+	Mat dst = Mat::zeros( src.size(), CV_8UC3 );
+	vector<Vec4i> hierarchy;
+	vector<vector<Point> > contours, prev_contours;
 	char* winName1 = "Original Image";
 	char* winName2 = "Threshold Image";
-	char* winName3 = "Contour Image";
-	double Percentage = 0.01;
-	unsigned int count;
+	char* winName3 = "Hot Spot Image";
+	double Percentage = 0.10;
+	bool count, check;
+	int thrshld;
+	double pixel_thresh;
 
 	//Normal Image
 	namedWindow(winName1, 2);
@@ -73,39 +78,55 @@ int main(){
 	 * algorithms will help.
 	 */
 
-	while(Percentage >= 0.0001)
+	/*
+	 * Find percentage to get orig thresh val, then inc thresh by 1 each loop instead of %.
+	 * use while(true),,,if(flag == 0),,,,
+	 */
+	check = true;
+	pixel_thresh = 20; //Initiate minimum contour area
+
+	while(true)
 	{
-		//Obtain threshold value and print value
-		int thrshld = getThreshVal(tmp1, Percentage);
+		// Obtain threshold value and print value
+		if(!check)
+		{
+			++thrshld;
+			std::cout << "Threshold: " << thrshld << std::endl;
+		}
+		else
+		{
+			thrshld = getThreshVal(tmp1, Percentage);
+			cout << "Initial Thresh: %" << Percentage*100 << endl;
+			check = false;
+		}
+
 		threshold(tmp1,dst_contour,thrshld, 255, THRESH_BINARY);
 
-		//Show threshold image
+		// Show threshold image
 		namedWindow(winName2, 2);
 		imshow(winName2, dst_contour);
 
-		//Get the vector of contours and print contour images
-		contours = getContourImg(dst_contour);
+		// Get the vector of contours and print contour images
+		contours = getContourImg(dst_contour, hierarchy);
+		//cp_contours = contours; // Make a copy
 
-		//Find number of contours in image
-		count = countContours(contours);
-		if(count == 1)
+		// Find number of contours in image
+		count = countContours(contours, prev_contours, pixel_thresh); //!!!!!!!!!!!!!SOMETHINGS WRONG IN HERE!!!!!!!!!!!!!!!!!!!!!!!
+		if(count == true)
 		{
 			cout << "\nDone!\n";
 			break;
 		}
-
-		Percentage = Percentage - 0.0001;
-		cout << "%" << Percentage*100 << endl;
-
 	}
 
+	// Produce the final output Mat
+	hotSpotImage(dst, contours, pixel_thresh, hierarchy);
 
-	while(true)
-	{
-	  int c;
-	  c = waitKey( 20 );
-	  if( (char)c == 27 )
-		{ break; }
-	 }
+	// Show hot spot image
+	namedWindow(winName3, 2);
+	imshow(winName3, dst);
+
+	waitKey(0);
+
 	return 0;
 }
