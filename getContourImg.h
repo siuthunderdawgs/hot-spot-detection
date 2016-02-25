@@ -16,7 +16,7 @@
 using namespace cv;
 
 
-vector<vector<Point> > getContourImg(Mat src);
+vector<vector<Point> > getContourImg(Mat src, vector<Vec4i> &hierarchy);
 
 
 

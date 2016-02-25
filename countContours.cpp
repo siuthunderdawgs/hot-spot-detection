@@ -6,38 +6,50 @@
  */
 #include<highgui/highgui.hpp>
 #include<imgproc/imgproc.hpp>
+#include<iostream>
 #include"countContours.h"
 
 using namespace cv;
 
-unsigned int countContours(vector<vector<Point> > contours)
+bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &prev_contours, double &pixel_thresh)
 {
 	double area;
-	double pixel_thresh = 8.0; //8 seems reasonable for now
-	vector<double> new_contours;
+	vector<vector<Point> > new_contours;
 
-	if(contours.size() == 1)
+
+	//Iterate through contours
+	for(unsigned int i = 0; i < contours.size(); ++i)
 	{
-		return 1; //1 contour in the image
+		area = contourArea(contours[i]);
+
+		//Ignore contours smaller than  pixel_thersh
+		if(area >= pixel_thresh)
+			new_contours.push_back(contours[i]);
+	}
+
+	if(new_contours.size() > 1)
+	{
+		std::cout << "Multiple contours in the image: NOT DONE\n";
+		prev_contours = contours; // Make a copy of the previous contour vector
+		return false; //Multiple contours in the image: NOT DONE
+	}
+	else if(new_contours.size() == 0)
+	{
+		std::cout << "Use previous contour vector: DONE\n";
+		contours = prev_contours;
+		return true; //Use previous contour vector: DONE
+	}
+	else if(new_contours.size() == 1)
+	{
+		std::cout << "1 desirable contours in the vector: DONE\n";
+		contours = new_contours;
+		return true; //1 desirable contours in the vector: DONE
 	}
 	else
 	{
-		//Iterate through contours
-	    for(unsigned int i = 0; i < contours.size(); ++i)
-	    {
-			area = contourArea(contours[i]);
-
-			//Ignore contours smaller than  pixel_thersh
-			if(area >= pixel_thresh)
-				new_contours.push_back(i);
-		}
-
-	    if(new_contours.size() != 1)
-	    	return 0; //More than 1 desirable contour in the image
-	    else
-	    	return 1; //1 desirable contour in the image
+		std::cout << "Whoops?!\n";
+		return false;
 	}
-
 }
 
 
