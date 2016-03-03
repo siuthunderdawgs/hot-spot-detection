@@ -12,7 +12,7 @@
 using namespace cv;
 
 
-void hotSpotImage(Mat &src, vector<vector<Point> > &contours, double &pixel_thresh, vector<Vec4i> &hierarchy)
+void hotSpotImage(Mat &src, vector<vector<Point> > &contours,  double &pix_thrsh_lowr, double &pix_thrsh_uppr, vector<Vec4i> &hierarchy)
 {
 
 	if(src.empty())
@@ -30,10 +30,10 @@ void hotSpotImage(Mat &src, vector<vector<Point> > &contours, double &pixel_thre
 	{
 		area = contourArea(contours[i]);
 
-		// Ignore contours smaller than  pixel_thersh
-		if(area >= pixel_thresh)
+		// Keep contours between the upper and lower pixel threshold bounds
+		if((area >= pix_thrsh_lowr) )
 		{
-			// std::cout << "Area" << i << "= " << area << std::endl;
+			std::cout << "Area" << i << "= " << area << std::endl;
 			new_contours.push_back(contours[i]);
 		}
 	}

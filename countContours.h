@@ -14,7 +14,7 @@
 
 using namespace cv;
 
-bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &prev_contours, double &pixel_thresh);
+bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &prev_contours,  double &pix_thrsh_lowr, double &pix_thrsh_uppr);
 
 
 #endif /* COUNTCONTOURS_H_ */

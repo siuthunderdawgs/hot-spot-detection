@@ -17,7 +17,7 @@
 
 using namespace std;
 
-void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &pixel_thresh);
+void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &thresh_percent, double &pix_thrsh_lowr, double &pix_thrsh_uppr);
 
 
 

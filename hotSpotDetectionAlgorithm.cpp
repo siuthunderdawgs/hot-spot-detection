@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &pixel_thresh){
+void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &thresh_percent,  double &pix_thrsh_lowr, double &pix_thrsh_uppr){
 
 
 	//const char* ir_image = "Images/Fabricated/f3.jpg";
@@ -23,14 +23,14 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 
 	Mat dst_contour;
 	Mat tmp1 = src.clone();
-	Mat dst = Mat::zeros( src.size(), CV_8UC3 ); // Initialize empty Mat
+	Mat dst = Mat::zeros( src.size(), CV_8U ); // Initialize empty Mat
 	vector<Vec4i> hierarchy;
 	//vector<vector<Point> > contours;
 	vector<vector<Point> > prev_contours;
 	char* winName1 = "Original Image";
 	char* winName2 = "Threshold Image";
 	char* winName3 = "Hot Spot Image";
-	double Percentage = 0.10;
+	//double thresh_percent = 0.10;
 	bool count, check;
 	int thrshld;
 	// double pixel_thresh;
@@ -41,7 +41,7 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 	 */
 
 	/**********Background*********
-	 * Reduce the percentage level through iteration. This will increase the
+	 * Reduce the thresh_percent level through iteration. This will increase the
 	 * threshold level, which will affect the number of contours in an image.
 	 * The stopping condition of the loop must depend on the number of
 	 * contours in an image. When there is one contour left in the image,
@@ -75,7 +75,8 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 	 */
 
 	check = true;
-	pixel_thresh = 20; //Initiate minimum contour area
+	//thresh_percent = 0.10;
+	//pixel_thresh = 20; //Initiate minimum contour area
 
 	while(true)
 	{
@@ -83,12 +84,13 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 		if(!check)
 		{
 			++thrshld;
-			// std::cout << "Threshold: " << thrshld << std::endl;
+			std::cout << "Threshold: " << thrshld << std::endl;
 		}
 		else
 		{
-			thrshld = getThreshVal(tmp1, Percentage);
-			// cout << "Initial Thresh: %" << Percentage*100 << endl;
+			thrshld = getThreshVal(tmp1, thresh_percent);
+			cout << "Initial Thresh: %" << thresh_percent*100 << endl;
+			cout << "Threshold: " << thrshld << endl;
 			check = false;
 		}
 
@@ -103,7 +105,7 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 		contours = getContourImg(dst_contour, hierarchy);
 
 		// Find number of contours in image
-		count = countContours(contours, prev_contours, pixel_thresh);
+		count = countContours(contours, prev_contours,  pix_thrsh_lowr, pix_thrsh_uppr);
 		if(count == true)
 		{
 			// cout << "\nDone!\n";
@@ -112,7 +114,7 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 	}
 
 	// Produce the final output Mat
-	hotSpotImage(dst, contours, pixel_thresh, hierarchy);
+	hotSpotImage(dst, contours, pix_thrsh_lowr, pix_thrsh_uppr, hierarchy);
 
 	// Output Mat dst (a.k.a. src)
 	src = dst;
