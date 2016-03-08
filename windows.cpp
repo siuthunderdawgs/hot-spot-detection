@@ -14,7 +14,7 @@
 
 #include "windows.h"
 
-std::vector< std::vector<cv::Mat> > CreateWindows(cv::Mat input, int horz, int vert)
+std::vector< std::vector<cv::Mat> > CreateWindows(cv::Mat &input, int horz, int vert)
 {
 	std::vector<cv::Mat> row;
 	std::vector< std::vector<cv::Mat> > windows;

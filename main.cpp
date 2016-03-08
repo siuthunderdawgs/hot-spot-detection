@@ -15,8 +15,8 @@ int main()
 
 	// Create contour vector for points
 	vector<vector<Point> > contours;
-	double pix_thrsh_lowr = 8.0;
-	double pix_thrsh_uppr = 100.0;
+	double pix_thrsh_lowr = 20.0;
+	double pix_thrsh_uppr = 10000.0;
 	double thresh_percent = 0.20;
 
 	if(src.empty())
@@ -39,10 +39,23 @@ int main()
 		}
 	}
 
+	/*
+	 * for(i,j)
+	 * {
+	 * 		win = wins[i][j].clone();
+	 * 		hotSpotDetectionAlgorithm(win, out,...);
+	 * 		win[i][j] = out.clone();
+	 * }
+	 */
+
+	Mat horizontal_upper, horizontal_lower, merged;
+	hconcat(windows[0][0],windows[1][0],horizontal_upper);
+	hconcat(windows[0][1],windows[1][1],horizontal_lower);
+	vconcat(horizontal_upper, horizontal_lower, merged);
 
 	// Windows
-	namedWindow("windows[0][0]", 2);
-	imshow("windows[0][0]", windows[0][0]);
+	namedWindow("Merged", 2);
+	imshow("Merged", merged);
 
 	// Hot Spot Image
 	namedWindow("Hot Spot Image", 2);

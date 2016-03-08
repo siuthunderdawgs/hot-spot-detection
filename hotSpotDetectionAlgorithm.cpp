@@ -7,6 +7,17 @@
 
 using namespace std;
 
+/* Update
+/*
+ * Add and input/output parameter to the function (Mat input, Mat output)
+ *
+ * Include all possible parameters, use defaults, or make everything a class
+ *
+ * Mat src is being cloned and losing the pointers for the Windows() function.
+ *
+ * Pass src into hotSpotImage()??
+ */
+
 void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &thresh_percent,  double &pix_thrsh_lowr, double &pix_thrsh_uppr){
 
 
@@ -27,9 +38,9 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 	vector<Vec4i> hierarchy;
 	//vector<vector<Point> > contours;
 	vector<vector<Point> > prev_contours;
-	char* winName1 = "Original Image";
-	char* winName2 = "Threshold Image";
-	char* winName3 = "Hot Spot Image";
+	//char* winName1 = "Original Image";
+	//char* winName2 = "Threshold Image";
+	//char* winName3 = "Hot Spot Image";
 	//double thresh_percent = 0.10;
 	bool count, check;
 	int thrshld;
@@ -40,39 +51,6 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 	imshow(winName1, src);
 	 */
 
-	/**********Background*********
-	 * Reduce the thresh_percent level through iteration. This will increase the
-	 * threshold level, which will affect the number of contours in an image.
-	 * The stopping condition of the loop must depend on the number of
-	 * contours in an image. When there is one contour left in the image,
-	 * the loop should break. This would indicate the "hottest spot" in the
-	 * image.
-	 *
-	 * The returned value "contours" is a vector of
-	 * vectors; rather, it is a vector that holds a set of points for each
-	 * contour in the image. Example: if the vector has 3 containers, there
-	 * are 3 contour shapes in the image.
-	 *
-	 * There are several different conditions that affect the number of
-	 * contours in the image. For example, one threshold level may produce
-	 * 5 contours and the next highest produce 12. Likewise, there are many
-	 * different variable conditions that determine what a contour is (refer
-	 * to getContourImg.cpp and the functions used).
-	 */
-
-    /***********What Needs to be Done*********
-     *
-     */
-
-	/**********End Notes*********
-	 * This isn't perfect. There are plenty of worst case scenarios this
-	 * will fail on, but it should take care of the basic hot spots in
-	 * generic images.
-	 *
-	 * This program will also always find a hot spot, even if it isn't a
-	 * true hot spot, but that's where cross-examination with the other
-	 * algorithms will help.
-	 */
 
 	check = true;
 	//thresh_percent = 0.10;
@@ -117,7 +95,7 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 	hotSpotImage(dst, contours, pix_thrsh_lowr, pix_thrsh_uppr, hierarchy);
 
 	// Output Mat dst (a.k.a. src)
-	src = dst;
+	src = dst.clone();
 
 	/* Show hot spot image
 	namedWindow(winName3, 2);
