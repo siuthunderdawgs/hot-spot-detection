@@ -6,40 +6,32 @@
 using namespace cv;
 
 
-vector<vector<Point> > getContourImg(Mat src, vector<Vec4i> &hierarchy){
+vector<vector<Point> > getContourImg(Mat input, vector<Vec4i> &hierarchy, int blur_ksize){
 
 
 	vector<vector<Point> > contours;
 	Scalar color(200); //color of contours in output image
 
-	//!!!Median filter, erosion and dilation
-	//blur( src, src, Size(2,2) );
-	medianBlur(src, src, 1);
+	// blur the contours to avoid pixelated fragmentation.
+	// warning: increasing the kernel size greatly affects the final outcome
+	// warning: blur_ksize must be odd
+	medianBlur(input, input, blur_ksize);
 
 
-    findContours( src, contours, hierarchy,
-        CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
+    findContours( input, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
+
+    if(contours.size() == 0)
+    {
+    	return contours;
+    }
 
     // iterate through all the top-level contours,
     int idx = 0;
     for( ; idx >= 0; idx = hierarchy[idx][0] )
     {
-        drawContours( src, contours, idx, color, CV_FILLED, 8, hierarchy );
+        drawContours( input, contours, idx, color, CV_FILLED, 8, hierarchy );
     }
 
-/*
-	double area;
-    for(unsigned int i = 0; i < contours.size(); i++)
-    {
-		area = contourArea(contours[i]);
-		std::cout << "Area" << i << "= " << area << std::endl;
-	}
-*/
-
-    /* Show in a window
-    namedWindow( "Contours", 2 );
-    imshow( "Contours", src );
-     */
     return contours;
 }
 

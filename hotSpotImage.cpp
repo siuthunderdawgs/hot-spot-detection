@@ -12,10 +12,10 @@
 using namespace cv;
 
 
-void hotSpotImage(Mat &src, vector<vector<Point> > &contours,  double &pix_thrsh_lowr, double &pix_thrsh_uppr, vector<Vec4i> &hierarchy)
+void hotSpotImage(Mat &output, vector<vector<Point> > &contours,  double &pix_thrsh_lowr, double &pix_thrsh_uppr, vector<Vec4i> &hierarchy)
 {
 
-	if(src.empty())
+	if(output.empty())
 	{
 		std::cout << "Image not found. hotSpotImage(). Whoops?!\n";
 		return;
@@ -31,7 +31,7 @@ void hotSpotImage(Mat &src, vector<vector<Point> > &contours,  double &pix_thrsh
 		area = contourArea(contours[i]);
 
 		// Keep contours between the upper and lower pixel threshold bounds
-		if((area >= pix_thrsh_lowr) )
+		if((area >= pix_thrsh_lowr) && (area <= pix_thrsh_uppr))
 		{
 			std::cout << "Area" << i << "= " << area << std::endl;
 			new_contours.push_back(contours[i]);
@@ -42,7 +42,7 @@ void hotSpotImage(Mat &src, vector<vector<Point> > &contours,  double &pix_thrsh
 	// produces a black image with white blobs (i.e. contours)
 	for( unsigned int i = 0; i< new_contours.size(); i++ )
 	 {
-		drawContours( src, new_contours, i, color, CV_FILLED, 8, hierarchy, 0, Point() );
+		drawContours( output, new_contours, i, color, CV_FILLED, 8, hierarchy, 0, Point() );
 	 }
 
 	contours = new_contours;

@@ -16,7 +16,7 @@
 using namespace cv;
 
 
-void hotSpotImage(Mat &src, vector<vector<Point> > &contours, double &pix_thrsh_lowr, double &pix_thrsh_uppr, vector<Vec4i> &hierarchy);
+void hotSpotImage(Mat &output, vector<vector<Point> > &contours, double &pix_thrsh_lowr, double &pix_thrsh_uppr, vector<Vec4i> &hierarchy);
 
 
 

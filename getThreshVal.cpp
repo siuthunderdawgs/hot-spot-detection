@@ -13,20 +13,20 @@ using namespace cv;
 
 
 
-int getThreshVal(Mat image, double Percentage)
+int getThreshVal(Mat input, double Percentage)
 {
     int pixel_count = 0;
     int threshold;
 
 
-	// Allocate memory for no of pixels for each intensity value
+	// Allocate memory for number of pixels for each intensity value
 	int histogram[256]={};
 
 
-	// calculate the no of pixels for each intensity values
-	for(int y = 0; y < image.rows; y++)
-		for(int x = 0; x < image.cols; x++)
-			histogram[(int)image.at<uchar>(y,x)]++;
+	// calculate the number of pixels for each intensity values
+	for(int y = 0; y < input.rows; y++)
+		for(int x = 0; x < input.cols; x++)
+			histogram[(int)input.at<uchar>(y,x)]++;
 
 
 	// find the maximum intensity element from histogram
@@ -37,10 +37,10 @@ int getThreshVal(Mat image, double Percentage)
 		}
 	}
 
-	int pixels = image.rows*image.cols;
+	int pixels = input.rows*input.cols;
 
-	//Find the initial threshold level based on top percentage of pixels.
-	//Back iterate through histogram[], adding up the bins to find the bin that matches the desired percent.
+	// Find the initial threshold level based on top percentage of pixels.
+	// Back iterate through histogram[], adding up the bins to find the bin that matches the desired percent.
 	for( int i = 255; i>=0; i--)
 	{
 		pixel_count+=histogram[i];
@@ -50,8 +50,6 @@ int getThreshVal(Mat image, double Percentage)
 			break;
 		}
 	}
-
-	// std::cout << "Threshold: " << threshold << endl;
 
 	return threshold;
 

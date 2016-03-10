@@ -4,72 +4,61 @@
 
 int main()
 {
-	// Read an image from directory and create Mat src
-	const char* ir_image = "Images/Fabricated/f3.jpg";
-	Mat src = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
-	Mat dst = Mat::zeros( src.size(), CV_8U );;
-	Mat dst_n_src;
-	vector<vector<Mat> > windows;
-	int horz = 2;
-	int vert = 2;
+	// Read an image from directory and create Mat input
+	const char* ir_image = "Images/Fabricated/f4.jpg";
+	Mat input = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
+	Mat output = Mat::zeros( input.size(), CV_8U );
+
+	Mat output_n_input;
+	Mat tmp;
+	vector<vector<Mat> > windows_in;
+	vector<vector<Mat> > windows_out;
+	int horz = 4;
+	int vert = 4;
 
 	// Create contour vector for points
 	vector<vector<Point> > contours;
-	double pix_thrsh_lowr = 20.0;
-	double pix_thrsh_uppr = 10000.0;
-	double thresh_percent = 0.20;
+	double pix_thrsh_lowr = 15.0;
+	double pix_thrsh_uppr = 100.0;
+	double thresh_percent = 0.1;
+	int blur_ksize = 1; // must be odd
 
-	if(src.empty())
+	if(input.empty())
 	{
 		std::cout << "Image not found. Check directory.\n";
 		return 0;
 	}
 
-	// Original Image
-	namedWindow("Original Image", 2);
-	imshow("Original Image", src);
+	// Input Image
+	namedWindow("Input Image", 2);
+	imshow("Input Image", input);
 
-	windows = CreateWindows(src, horz, vert);
+	// Window the input image and empty output image
+	windows_in = CreateWindows(input, horz, vert);
+	windows_out = CreateWindows(output, horz, vert);
 
+	// Iterate through Hot Spot Algorithm using the windows
 	for(int col = 0; col < vert; ++col)
 	{
 		for(int row = 0; row < horz; ++row)
 		{
-			hotSpotDetectionAlgorithm(windows[col][row], contours, thresh_percent, pix_thrsh_lowr, pix_thrsh_uppr); //blur filter - getContourImg()
+			std::cout << "window[" << row << "][" << col << "]\n";
+			hotSpotDetectionAlgorithm(windows_in[row][col], windows_out[row][col], contours, thresh_percent, pix_thrsh_lowr, pix_thrsh_uppr, blur_ksize); //blur filter - getContourImg()
 		}
 	}
 
-	/*
-	 * for(i,j)
-	 * {
-	 * 		win = wins[i][j].clone();
-	 * 		hotSpotDetectionAlgorithm(win, out,...);
-	 * 		win[i][j] = out.clone();
-	 * }
-	 */
-
-	Mat horizontal_upper, horizontal_lower, merged;
-	hconcat(windows[0][0],windows[1][0],horizontal_upper);
-	hconcat(windows[0][1],windows[1][1],horizontal_lower);
-	vconcat(horizontal_upper, horizontal_lower, merged);
-
-	// Windows
-	namedWindow("Merged", 2);
-	imshow("Merged", merged);
-
 	// Hot Spot Image
 	namedWindow("Hot Spot Image", 2);
-	imshow("Hot Spot Image", src);
+	imshow("Hot Spot Image", output);
 
-	// Overlay Image
-	Mat tmp;
-	cvtColor(src, tmp, CV_GRAY2BGR);
-	src = tmp.clone();
-	cvtColor(dst, tmp, CV_GRAY2BGR);
-	dst = tmp.clone();
-	addWeighted(src, 1, dst, 0.5, 0, dst_n_src);
+	// Overlay Image of Input and Output
+	cvtColor(input, tmp, CV_GRAY2BGR);
+	input = tmp.clone();
+	cvtColor(output, tmp, CV_GRAY2BGR);
+	output = tmp.clone();
+	addWeighted(input, 1, output, 0.5, 0, output_n_input);
 	namedWindow("Overlay Image", 2);
-	imshow("Overlay Image", dst_n_src);
+	imshow("Overlay Image", output_n_input);
 
 	waitKey(0);
 

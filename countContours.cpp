@@ -16,12 +16,18 @@ bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &pre
 	double area;
 	vector<vector<Point> > new_contours;
 
+	if(contours.size() == 0)
+	{
+		std::cout<<"Zero contours in image: DONE"<<std::endl;
+		return true;
+	}
+
 	//Iterate through contours
 	for(unsigned int i = 0; i < contours.size(); ++i)
 	{
 		area = contourArea(contours[i]);
 
-		//Keep contours between lower and upper pixel threshold bounds
+		//Keep contours that are between lower and upper pixel threshold bounds
 		if((area >= pix_thrsh_lowr) && (area <= pix_thrsh_uppr))
 		{
 			new_contours.push_back(contours[i]);

@@ -16,7 +16,7 @@
 using namespace cv;
 
 
-vector<vector<Point> > getContourImg(Mat src, vector<Vec4i> &hierarchy);
+vector<vector<Point> > getContourImg(Mat input, vector<Vec4i> &hierarchy, int blur_ksize);
 
 
 

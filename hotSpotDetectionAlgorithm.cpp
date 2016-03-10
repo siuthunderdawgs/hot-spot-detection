@@ -13,48 +13,40 @@ using namespace std;
  *
  * Include all possible parameters, use defaults, or make everything a class
  *
- * Mat src is being cloned and losing the pointers for the Windows() function.
+ * Mat input is being cloned and losing the pointers for the Windows() function.
  *
- * Pass src into hotSpotImage()??
+ * Pass input into hotSpotImage()??
  */
 
-void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, double &thresh_percent,  double &pix_thrsh_lowr, double &pix_thrsh_uppr){
+void hotSpotDetectionAlgorithm(Mat &input, Mat &output, vector<vector<Point> > &contours, double &thresh_percent,  double &pix_thrsh_lowr, double &pix_thrsh_uppr, int blur_ksize){
 
+	/* ~~~Expected Passed Values~~~
+	 *  Mat input should be a grayscale image ??
+	 *  Mat output should be ??
+	 *  blur_ksize should be odd
+	 */
 
-	//const char* ir_image = "Images/Fabricated/f3.jpg";
-	//Mat src = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
-
-	if(src.empty())
+	if(input.empty())
 	{
-		std::cout << "Image not found. Check directory.\n";
+		std::cout << "No Input Image - hotSpotDetectionAlgorithm().\n";
+		return;
+	}
+
+	if((blur_ksize % 2) == 0)
+	{
+		std::cout << "blur_ksize must be odd for medianBlur() - hotSpotDetectionAlgorithm()\n";
 		return;
 	}
 
 	/* Local Variables */
 
-	Mat dst_contour;
-	Mat tmp1 = src.clone();
-	Mat dst = Mat::zeros( src.size(), CV_8U ); // Initialize empty Mat
+	Mat output_contour;
 	vector<Vec4i> hierarchy;
-	//vector<vector<Point> > contours;
 	vector<vector<Point> > prev_contours;
-	//char* winName1 = "Original Image";
-	//char* winName2 = "Threshold Image";
-	//char* winName3 = "Hot Spot Image";
-	//double thresh_percent = 0.10;
 	bool count, check;
 	int thrshld;
-	// double pixel_thresh;
-
-	/*Normal Image
-	namedWindow(winName1, 2);
-	imshow(winName1, src);
-	 */
-
 
 	check = true;
-	//thresh_percent = 0.10;
-	//pixel_thresh = 20; //Initiate minimum contour area
 
 	while(true)
 	{
@@ -66,42 +58,25 @@ void hotSpotDetectionAlgorithm(Mat &src, vector<vector<Point> > &contours, doubl
 		}
 		else
 		{
-			thrshld = getThreshVal(tmp1, thresh_percent);
+			thrshld = getThreshVal(input, thresh_percent);
 			cout << "Initial Thresh: %" << thresh_percent*100 << endl;
 			cout << "Threshold: " << thrshld << endl;
 			check = false;
 		}
 
-		threshold(tmp1,dst_contour,thrshld, 255, THRESH_BINARY);
-
-		/* Show threshold image
-		namedWindow(winName2, 2);
-		imshow(winName2, dst_contour);
-		 */
+		threshold(input,output_contour,thrshld, 255, THRESH_BINARY);
 
 		// Get the vector of contours and print contour images
-		contours = getContourImg(dst_contour, hierarchy);
+		contours = getContourImg(output_contour, hierarchy, blur_ksize);
 
 		// Find number of contours in image
 		count = countContours(contours, prev_contours,  pix_thrsh_lowr, pix_thrsh_uppr);
 		if(count == true)
 		{
-			// cout << "\nDone!\n";
 			break;
 		}
 	}
 
 	// Produce the final output Mat
-	hotSpotImage(dst, contours, pix_thrsh_lowr, pix_thrsh_uppr, hierarchy);
-
-	// Output Mat dst (a.k.a. src)
-	src = dst.clone();
-
-	/* Show hot spot image
-	namedWindow(winName3, 2);
-	imshow(winName3, dst);
-
-	waitKey(0);
-	*/
-	// return 0;
+	hotSpotImage(output, contours, pix_thrsh_lowr, pix_thrsh_uppr, hierarchy);
 }

@@ -18,7 +18,7 @@ using namespace cv;
 
 
 
-int getThreshVal(Mat image, double Percentage);
+int getThreshVal(Mat input, double Percentage);
 
 
 
