@@ -5,23 +5,24 @@
 int main()
 {
 	// Read an image from directory and create Mat input
-	const char* ir_image = "Images/Fabricated/f4.jpg";
+	const char* ir_image = "Images/Fabricated/f3.jpg";
 	Mat input = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
-	Mat output = Mat::zeros( input.size(), CV_8U );
 
+
+	Mat output = Mat::zeros( input.size(), CV_8U );
 	Mat output_n_input;
 	Mat tmp;
 	vector<vector<Mat> > windows_in;
 	vector<vector<Mat> > windows_out;
-	int horz = 4;
-	int vert = 4;
+	int horz = 2;
+	int vert = 2;
 
 	// Create contour vector for points
 	vector<vector<Point> > contours;
-	double pix_thrsh_lowr = 15.0;
+	double pix_thrsh_lowr = 6.0;
 	double pix_thrsh_uppr = 100.0;
-	double thresh_percent = 0.1;
-	int blur_ksize = 1; // must be odd
+	double thresh_percent = 0.05;
+	int blur_ksize = 3; // must be odd
 
 	if(input.empty())
 	{

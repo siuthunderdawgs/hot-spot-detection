@@ -31,7 +31,7 @@ void hotSpotImage(Mat &output, vector<vector<Point> > &contours,  double &pix_th
 		area = contourArea(contours[i]);
 
 		// Keep contours between the upper and lower pixel threshold bounds
-		if((area >= pix_thrsh_lowr) && (area <= pix_thrsh_uppr))
+		if(area >= pix_thrsh_lowr)
 		{
 			std::cout << "Area" << i << "= " << area << std::endl;
 			new_contours.push_back(contours[i]);

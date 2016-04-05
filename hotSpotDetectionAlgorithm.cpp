@@ -20,12 +20,6 @@ using namespace std;
 
 void hotSpotDetectionAlgorithm(Mat &input, Mat &output, vector<vector<Point> > &contours, double &thresh_percent,  double &pix_thrsh_lowr, double &pix_thrsh_uppr, int blur_ksize){
 
-	/* ~~~Expected Passed Values~~~
-	 *  Mat input should be a grayscale image ??
-	 *  Mat output should be ??
-	 *  blur_ksize should be odd
-	 */
-
 	if(input.empty())
 	{
 		std::cout << "No Input Image - hotSpotDetectionAlgorithm().\n";
