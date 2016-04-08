@@ -5,7 +5,7 @@
 int main()
 {
 	// Read an image from directory and create Mat input
-	const char* ir_image = "Images/Fabricated/f3.jpg";
+	const char* ir_image = "Images/Thermal/3.jpg";
 	Mat input = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
 
 
@@ -14,12 +14,12 @@ int main()
 	Mat tmp;
 	vector<vector<Mat> > windows_in;
 	vector<vector<Mat> > windows_out;
-	int horz = 2;
-	int vert = 2;
+	int horz = 4;
+	int vert = 4;
 
 	// Create contour vector for points
 	vector<vector<Point> > contours;
-	double pix_thrsh_lowr = 6.0;
+	double pix_thrsh_lowr = 5.0;
 	double pix_thrsh_uppr = 100.0;
 	double thresh_percent = 0.05;
 	int blur_ksize = 3; // must be odd
