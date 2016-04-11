@@ -25,19 +25,19 @@ int getThreshVal(Mat image, double Percentage)
         for(int x = 0; x < image.cols; x++)
             histogram[(int)image.at<uchar>(y,x)]++;
 
-    /*
+
     //Histogram array output
     for(int i = 0; i < 256; i++)
         cout<<histogram[i]<<" ";
-	*/
 
-    /*
+
+
     // draw the histograms
     int hist_w = 512; int hist_h = 400;
     int bin_w = cvRound((double) hist_w/256);
 
     Mat histImage(hist_h, hist_w, CV_8UC1, Scalar(255, 255, 255));
-	*/
+
 
     // find the maximum intensity element from histogram
     int max = histogram[0];
@@ -50,10 +50,10 @@ int getThreshVal(Mat image, double Percentage)
 
     int pixels = image.rows*image.cols;
 
-    /*
+
     //Number of pixels in the image
     cout << "\nPixels: " << pixels << endl;
-	*/
+
 
     //Find the threshold level based on top percentage of pixels.
     //Back iterate through histogram[], adding up the bins to find the bin that matches the desired percent.
@@ -74,7 +74,7 @@ int getThreshVal(Mat image, double Percentage)
     }
     cout << "Threshold: " << threshold << endl;
 
-    /*
+
     // normalize the histogram between 0 and histImage.rows
 
     for(int i = 0; i < 255; i++){
@@ -98,8 +98,8 @@ int getThreshVal(Mat image, double Percentage)
     namedWindow("Image", CV_WINDOW_AUTOSIZE);
     imshow("Image", image);
 
-    //waitKey();
-    */
+    // waitKey();
+
 
     return threshold;
 }
