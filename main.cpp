@@ -1,28 +1,11 @@
 #include<iostream>
 #include"hotSpotDetectionAlgorithm.h"
-#include"windows.h"
 
 int main()
 {
 	// Read an image from directory and create Mat input
-	const char* ir_image = "Images/Thermal/3.jpg";
+	const char* ir_image = "Images/Fabricated/f4.jpg";
 	Mat input = imread(ir_image, CV_LOAD_IMAGE_GRAYSCALE);
-
-
-	Mat output = Mat::zeros( input.size(), CV_8U );
-	Mat output_n_input;
-	Mat tmp;
-	vector<vector<Mat> > windows_in;
-	vector<vector<Mat> > windows_out;
-	int horz = 4;
-	int vert = 4;
-
-	// Create contour vector for points
-	vector<vector<Point> > contours;
-	double pix_thrsh_lowr = 5.0;
-	double pix_thrsh_uppr = 100.0;
-	double thresh_percent = 0.05;
-	int blur_ksize = 3; // must be odd
 
 	if(input.empty())
 	{
@@ -30,23 +13,25 @@ int main()
 		return 0;
 	}
 
+	// Local Variables
+	Mat output = Mat::zeros( input.size(), CV_8U );
+	Mat output_n_input;
+	Mat tmp;
+	vector<vector<Point> > contours;
+
+	// Variable Assignment for Hot Spot Detection Algorithm
+	int win_horz = 4;
+	int win_vert = 4;
+	double pix_thrsh_lowr = 3.0;
+	double pix_thrsh_uppr = 50.0;
+	double thresh_percent = 0.1;
+	int blur_ksize = 3; // must be odd
+
+	hotSpotDetectionAlgorithm(input, output, win_horz, win_vert, contours, thresh_percent, pix_thrsh_lowr, pix_thrsh_uppr, blur_ksize); //blur filter - getContourImg()
+
 	// Input Image
 	namedWindow("Input Image", 2);
 	imshow("Input Image", input);
-
-	// Window the input image and empty output image
-	windows_in = CreateWindows(input, horz, vert);
-	windows_out = CreateWindows(output, horz, vert);
-
-	// Iterate through Hot Spot Algorithm using the windows
-	for(int col = 0; col < vert; ++col)
-	{
-		for(int row = 0; row < horz; ++row)
-		{
-			std::cout << "window[" << row << "][" << col << "]\n";
-			hotSpotDetectionAlgorithm(windows_in[row][col], windows_out[row][col], contours, thresh_percent, pix_thrsh_lowr, pix_thrsh_uppr, blur_ksize); //blur filter - getContourImg()
-		}
-	}
 
 	// Hot Spot Image
 	namedWindow("Hot Spot Image", 2);

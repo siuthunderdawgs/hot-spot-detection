@@ -18,7 +18,7 @@ bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &pre
 
 	if(contours.size() == 0)
 	{
-		std::cout<<"Zero contours in image: DONE"<<std::endl;
+		//std::cout<<"Zero contours in image: DONE"<<std::endl;
 		contours = prev_contours;
 		return true;
 	}
@@ -32,7 +32,7 @@ bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &pre
 		if(area >= pix_thrsh_lowr)
 		{
 			new_contours.push_back(contours[i]);
-			std::cout << "Area" << i << "= " << area << std::endl;
+			//std::cout << "Area" << i << "= " << area << std::endl;
 		}
 	}
 
@@ -41,7 +41,7 @@ bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &pre
 	{
 		if(contourArea(new_contours[i])<= pix_thrsh_lowr || contourArea(new_contours[i]) >= pix_thrsh_uppr)
 		{
-			std::cout << "Contour(s) out of pixel threshold range: NOT DONE\n";
+			//std::cout << "Contour(s) out of pixel threshold range: NOT DONE\n";
 			prev_contours = contours;
 			return false;
 		}
@@ -50,43 +50,20 @@ bool countContours(vector<vector<Point> > &contours, vector<vector<Point> > &pre
 
 	if(new_contours.size() > 1)
 	{
-		std::cout << "Multiple contours in the image: NOT DONE\n";
+		//std::cout << "Multiple contours in the image: NOT DONE\n";
 		prev_contours = contours; // Make a copy of the previous contour vector
 		return false; //Multiple contours in the image: NOT DONE
 	}
 	else if(new_contours.size() == 0)
 	{
-		std::cout << "Use previous contour image: DONE\n";
+		//std::cout << "Use previous contour image: DONE\n";
 		contours = prev_contours;
 		return true; //Use previous contour vector: DONE
 	}
 
-	std::cout << "Contour(s) in pixel threshold range: DONE\n";
+	//std::cout << "Contour(s) in pixel threshold range: DONE\n";
 	contours = new_contours;
 	return true;
-
-
-
-	/*
-	else if(new_contours.size() == 1)
-	{
-		// Condition: if contour is above uppr_pix_thrsh, continue thresholding
-		if(area >= pix_thrsh_uppr)
-		{
-			std::cout << "1 contour in the image, too large: NOT DONE\n";
-			return false; //Continue thresholding
-		}
-
-		std::cout << "1 desirable contours in the image: DONE\n";
-		contours = new_contours;
-		return true; //1 desirable contours in the vector: DONE
-	}
-	else
-	{
-		std::cout << "countContours() - Whoops?!\n";
-		return false;
-	}
-	*/
 }
 
 
